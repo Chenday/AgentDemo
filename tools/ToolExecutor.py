@@ -6,14 +6,20 @@ class ToolExecutor:
     """
     工具执行器，负责管理和执行工具
     """
-    def  __init__(self):
-        self.tools: Dict[str, Dict[str, Any]] = {}
+    _instance = None
+    tools: Dict[str, Dict[str, Any]] = {} 
 
-    def registerTool(self, name: str, description: str, func: callable):
+    def  __new__(cls):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance
+
+    @classmethod
+    def registerTool(cls, name: str, description: str, func: callable):
         """向工具注册一个新工具"""
-        if name in self.tools:
+        if name in cls.tools:
             print(f"Warming： 工具 '{name}' 已存在，将被覆盖。")
-        self.tools[name] = {"description": description, "func": func}
+        cls.tools[name] = {"description": description, "func": func}
         print(f"工具 '{name}' 已注册。")
 
     def getTool(self, name: str) -> callable:
@@ -28,6 +34,8 @@ class ToolExecutor:
         """
         return "\n".join([f"- {name} : {info['description']}"
             for name, info in self.tools.items()])
+
+import tools.implement
 
 if __name__ == '__main__':
     # 1. 初始化工具执行器

@@ -2,7 +2,7 @@ import os
 from openai import OpenAI
 from dotenv import load_dotenv
 from typing import List, Dict
-import argparse
+
 
 load_dotenv()
 
@@ -43,31 +43,18 @@ class AgentsLLM:
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="工具命令行")
-    parser.add_argument("quest", help="请求问题")
-
-    params = parser.parse_args()
-
     try:
         llm = AgentsLLM()
 
-        # exampleMessages = [
-        #     {"role": "system", "content": "You are a helpful assistant that writes python code."},
-        #     {"role": "user", "content": "写一个快速排序算法"}
-        # ]
+        exampleMessages = [
+            {"role": "system", "content": "You are a helpful assistant that writes python code."},
+            {"role": "user", "content": "写一个快速排序算法"}
+        ]
 
-        # responseText = llm.think(exampleMessages)
-        # if responseText:
-        #     print("\n\n--- 完整模型响应 ---")
-        #     print(responseText)
-
-        from tools.ToolExecutor import ToolExecutor
-        toolExt = ToolExecutor()
-
-        import ReActAgent
-        ReAct = ReActAgent.ReActAgent(llm, toolExt)
-        ReAct.run(params.quest)
+        responseText = llm.think(exampleMessages)
+        if responseText:
+            print("\n\n--- 完整模型响应 ---")
+            print(responseText)
 
     except ValueError as e:
         print(e)
-
